@@ -7,6 +7,7 @@ class Socket(socket.socket):
 
             socket.AF_INET,
             socket.SOCK_STREAM,
+
         )
 
     def send_data(self, data):
@@ -17,6 +18,3 @@ class Socket(socket.socket):
 
     def set_up(self):
         raise NotImplementedError()
-
-    #def send_all_users(self,data):
-

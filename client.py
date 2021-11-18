@@ -1,10 +1,8 @@
-
 from Socket import Socket
 from threading import Thread
 
 
 class Client(Socket):
-
     def __init__(self):
         super(Client, self).__init__()
 
@@ -22,9 +20,9 @@ class Client(Socket):
     def listen_socket(self, listened_socket=None):
         while True:
             data = self.recv(2048)  # receive
-            print(data.decode())
+            print(data.decode("utf-8"))
 
-    def send_data(self,data):
+    def send_data(self, data):
         while True:
             self.send(input(":::").encode("utf-8"))
 
