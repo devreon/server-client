@@ -5,20 +5,21 @@ import threading
 class Server(Socket):
     def __init__(self):
         super(Server, self).__init__()
-        self.bind( ("127.0.0.1", 1234))
 
         self.listen(5)
         print("Server is listening")
 
-        self.users=[]
+        self.users = []
 
-    def send_data(self,data):
-        for user in self.users:
-            user.send(data)
+
 
     def set_up(self):
         self.bind(("127.0.0.1", 1234))
         self.accept_sockets()
+
+    def send_data(self, data):
+        for user in self.users:
+            user.send(data)
 
     def listen_socket(self, listened_socket=None):
         print("Listening user")
@@ -26,7 +27,7 @@ class Server(Socket):
             data = listened_socket.recv(2048)
             print(f"User sent {data}")
 
-            self.send_all(data)
+            self.send_data(data)
 
     def accept_sockets(self):
         while True:
