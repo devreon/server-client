@@ -45,11 +45,11 @@ badge = dbc.Button(
     color="primary",
 )
 app.layout = html.Div([
-    #graph
-    html.Div(
-        children=[dcc.Graph(id='my-graph', figure=fig)]
+    # graph
+    html.Div(  # size of plot in style
+        children=[dcc.Graph(id='my-graph', figure=fig, style={'width': '70vh', 'height': '70vh', 'display':'inline-block'})]
     ),
-    #slider
+    # slider
     dcc.Slider(
         id='my-slider',
         min=t_min,
