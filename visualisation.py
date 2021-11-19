@@ -8,9 +8,6 @@ import dash_bootstrap_components as dbc
 import numpy as np
 import math
 
-ALLOWED_TYPES = (
-    "number",
-)
 
 # ---------- Initialize X, Y, Z ----------
 
@@ -61,41 +58,62 @@ app.layout = html.Div([
 
     html.Div(id='slider-output-container'),
 
-    ]
+
     #button
+    html.Div(dcc.Input(id='inputX', type='text')),
+    html.Button('Submit', id='submitX', n_clicks=0),
+    html.Div(id='containerX', children='Enter a value and press submit'),
+
+    html.Div(dcc.Input(id='inputY', type='text')),
+    html.Button('Submit', id='submitY', n_clicks=0),
+    html.Div(id='containerY', children='Enter a value and press submit')
 
 
-
+]
+)
+@app.callback(
+    dash.dependencies.Output('containerY', 'children'),
+    dash.dependencies.Input('submitY', 'n_clicks'),
+    dash.dependencies.State('inputY', 'value'),
 
 )
+def update_output(n_clicks, value):
+    # так можно доставать вытащить значения для callback элемента.
+    # X=value
+    # print(X)
+    return 'The input value was "{}"  '.format(
+        value
 
+    )
+@app.callback(
+    dash.dependencies.Output('containerX', 'children'),
+    dash.dependencies.Input('submitX', 'n_clicks'),
+    dash.dependencies.State('inputX', 'value'),
 
+)
+def update_output(n_clicks, value):
+    # так можно доставать вытащить значения для callback элемента.
+    # X=value
+    # print(X)
+    return 'The input value was "{}"  '.format(
+        value
 
-# @app.callback(
-#     dash.dependencies.Output('container-button-timestamp', 'children'),
-#     [dash.dependencies.Input('btn-nclicks-1', 'n_clicks'),
-#     dash.dependencies.Input('btn-nclicks-2', 'n_clicks'),
-#     dash.dependencies.Input('btn-nclicks-3', 'n_clicks')]
-# )
-# def displayClick(btn1, btn2, btn3):
-#     changed_id = [p['prop_id'] for p in callback_context.triggered][0]
-#     if 'btn-nclicks-1' in changed_id:
-#         msg = 'Button 1 was most recently clicked'
-#     elif 'btn-nclicks-2' in changed_id:
-#         msg = 'Button 2 was most recently clicked'
-#     elif 'btn-nclicks-3' in changed_id:
-#         msg = 'Button 3 was most recently clicked'
-#     else:
-#         msg = 'None of the buttons have been clicked yet'
-#     return html.Div(msg)
+    )
 
-
+# slider callback for t .
 @app.callback(
     dash.dependencies.Output('slider-output-container', 'children'),
     dash.dependencies.Input('my-slider', 'value')
 
 )
 def update_output(value):
+    #printedvalue=value
+    #print(printedvalue)
     return 'You have selected t="{}"'.format(value)
+
+
+
+
+
 if __name__ == '__main__':
     app.run_server(debug=True, use_reloader=False)
