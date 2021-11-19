@@ -8,7 +8,9 @@ import dash_bootstrap_components as dbc
 import numpy as np
 import math
 
-
+t_min = 0
+t_max = 10
+t_change = 1
 # ---------- Initialize X, Y, Z ----------
 
 def f(x, y):
@@ -50,10 +52,12 @@ app.layout = html.Div([
     #slider
     dcc.Slider(
         id='my-slider',
-        min=0,
-        max=7,
+        min=t_min,
+        max=t_max,
         step=1,
         value=0,
+
+        marks={i: '{}'.format(i) for i in range(t_max+t_change)},
     ),
 
     html.Div(id='slider-output-container'),
