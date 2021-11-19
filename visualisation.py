@@ -35,10 +35,24 @@ app.title = "Steepest Descent"
 server = app.server
 
 app.layout = html.Div([
+
     html.Div(
         children=[dcc.Graph(id='my-graph', figure=fig)]
-    )
+    ),
+    dcc.Slider(
+        id='my-slider',
+        min=0,
+        max=7,
+        step=1,
+        value=0,
+    ),
+    html.Div(id='slider-output-container')
 ])
 
+@app.callback(
+    dash.dependencies.Output('slider-output-container', 'children'),
+    [dash.dependencies.Input('my-slider', 'value')])
+def update_output(value):
+    return 'You have selected "{}"'.format(value)
 if __name__ == '__main__':
     app.run_server(debug=True, use_reloader=False)
