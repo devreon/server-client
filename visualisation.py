@@ -63,14 +63,25 @@ app.layout = html.Div([
     html.Div(id='slider-output-container'),
 
 
-    #button
-    html.Div(dcc.Input(id='inputX', type='text')),
-    #html.Button('Submit', id='submitX', n_clicks=0),
-    html.Div(id='containerX', children='Enter a value and press submit'),
+    # button
+    # x
+    html.Div(dcc.Input(id='inputX_start', type='number', placeholder="x_start=")),
+    html.Div(dcc.Input(id='inputX_change', type='number', placeholder="x_change=")),
+    html.Div(dcc.Input(id='inputX_end', type='number', placeholder="x_end=")),
 
-    html.Div(dcc.Input(id='inputY', type='text')),
+    # y
+    html.Div(dcc.Input(id='inputY_start', type='number', placeholder="y_start=")),
+    html.Div(dcc.Input(id='inputY_change', type='number', placeholder="y_change=")),
+    html.Div(dcc.Input(id='inputY_end', type='number', placeholder="y_end=")),
 
-    html.Div(id='containerY', children='Enter a value and press submit'),
+    # t
+
+    html.Div(dcc.Input(id='inputT_start', type='number', placeholder="t_start=")),
+    html.Div(dcc.Input(id='inputT_change', type='number', placeholder="t_change=")),
+    html.Div(dcc.Input(id='inputT_end', type='number', placeholder="t_end=")),
+
+
+    html.Div(id='container', children=''),
 
     html.Button('Submit', id='submit', n_clicks=0),
 
@@ -82,17 +93,25 @@ app.layout = html.Div([
 
 
 @app.callback(
-    dash.dependencies.Output('containerY', 'children'),
+    dash.dependencies.Output('container', 'children'),
     dash.dependencies.Input('submit', 'n_clicks'),
-    [dash.dependencies.State('inputX', 'value'),
-    dash.dependencies.State('inputY', 'value')],
+    [dash.dependencies.State('inputX_start', 'value'),
+     dash.dependencies.State('inputX_change', 'value'),
+     dash.dependencies.State('inputX_end', 'value'),
+     dash.dependencies.State('inputY_start', 'value'),
+     dash.dependencies.State('inputY_change', 'value'),
+     dash.dependencies.State('inputY_end', 'value'),
+     dash.dependencies.State('inputT_start', 'value'),
+     dash.dependencies.State('inputT_change', 'value'),
+     dash.dependencies.State('inputT_end', 'value'),
+     ],
 )
-def update_output(n_clicks, value1, value2, ):
+def update_output(n_clicks, x_start, x_change, x_end, y_start, y_change, y_end, t_start, t_change, t_end):
     # так можно доставать вытащить значения для callback элемента.
     # X=value
     # print(X)
-    return 'The input value was {}_____{}  '.format(
-         value1, value2,n_clicks
+    return 'The input value was {}_____{}_____{}_____{}_____{}_____{}_____{}_____{}_____{}_____  '.format(
+         x_start, x_change, x_end,y_start, y_change, y_end, t_start, t_change, t_end, n_clicks
 
     )
 
@@ -104,8 +123,8 @@ def update_output(n_clicks, value1, value2, ):
 
 )
 def update_output(value):
-    #printedvalue=value
-    #print(printedvalue)
+    # printedvalue=value
+    # print(printedvalue)
     return 'You have selected t="{}"'.format(value)
 
 
