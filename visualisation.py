@@ -8,9 +8,7 @@ import dash_bootstrap_components as dbc
 import numpy as np
 import math
 
-t_min = 0
-t_max = 10
-t_change = 1
+
 # ---------- Initialize X, Y, Z ----------
 
 def f(x, y):
@@ -50,18 +48,18 @@ app.layout = html.Div([
         children=[dcc.Graph(id='my-graph', figure=fig, style={'width': '50vh', 'height': '50vh', 'display':'inline-block'})]
     ),
     # slider
+
     dcc.Slider(
         id='my-slider',
-        min=t_min,
-        max=t_max,
-        step=1,
+        min=0,
+        max=0,
+        step=0,
         value=0,
 
-        marks={i: '{}'.format(i) for i in range(t_max+t_change)},
+        marks={i: '{}'.format(i) for i in range(1 + 10)},
     ),
 
     html.Div(id='slider-output-container'),
-
 
     # button
     # x
@@ -88,10 +86,6 @@ app.layout = html.Div([
 ]
 )
 
-
-
-
-
 @app.callback(
     dash.dependencies.Output('container', 'children'),
     dash.dependencies.Input('submit', 'n_clicks'),
@@ -105,6 +99,7 @@ app.layout = html.Div([
      dash.dependencies.State('inputT_change', 'value'),
      dash.dependencies.State('inputT_end', 'value'),
      ],
+
 )
 def update_output(n_clicks, x_start, x_change, x_end, y_start, y_change, y_end, t_start, t_change, t_end):
     # так можно доставать вытащить значения для callback элемента.
@@ -114,6 +109,36 @@ def update_output(n_clicks, x_start, x_change, x_end, y_start, y_change, y_end, 
          x_start, x_change, x_end,y_start, y_change, y_end, t_start, t_change, t_end, n_clicks
 
     )
+
+
+@app.callback(
+    dash.dependencies.Output("my-slider", "min"),
+    dash.dependencies.Output("my-slider", "max"),
+
+    dash.dependencies.Output("my-slider", "value"),
+    dash.dependencies.Output("my-slider", "step"),
+    dash.dependencies.Output("my-slider", "marks"),
+    dash.dependencies.Input("submit", "n_clicks"),
+    dash.dependencies.State("my-slider", "min"),
+    dash.dependencies.State("my-slider", "max"),
+
+    dash.dependencies.State("my-slider", "value"),
+    dash.dependencies.State("my-slider", "step"),
+    dash.dependencies.State("my-slider", "marks"),
+    dash.dependencies.State('inputT_start', 'value'),
+    dash.dependencies.State('inputT_change', 'value'),
+    dash.dependencies.State('inputT_end', 'value'),
+)
+def update_slider(nClicks, sliderMin, sliderMax, sliderValue, sliderStep, sliderMarks,t_start, t_change, t_end):
+
+    if not nClicks:
+        return (sliderMin, sliderMax, sliderValue,sliderStep, sliderMarks)
+
+
+    return (t_start, t_end, 0, t_change, {i: '{}'.format(i) for i in range(t_start, t_end + t_change,t_change)})
+
+
+
 
 
 # slider callback for t .
