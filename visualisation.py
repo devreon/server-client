@@ -14,7 +14,7 @@ t_change = 1
 # ---------- Initialize X, Y, Z ----------
 
 def f(x, y):
-    return 1/2 * (math.pow(x+y,4)+math.pow(x-y,4))
+    return 1/2 * (math.pow(x+y, 4)+math.pow(x-y, 4))      # math.sin(x*x+y*y)/((x*x+y*y))
 
 X = np.arange(-10, 11, 1)
 Y = X
@@ -47,7 +47,7 @@ badge = dbc.Button(
 app.layout = html.Div([
     # graph
     html.Div(  # size of plot in style
-        children=[dcc.Graph(id='my-graph', figure=fig, style={'width': '70vh', 'height': '70vh', 'display':'inline-block'})]
+        children=[dcc.Graph(id='my-graph', figure=fig, style={'width': '50vh', 'height': '50vh', 'display':'inline-block'})]
     ),
     # slider
     dcc.Slider(
@@ -65,44 +65,37 @@ app.layout = html.Div([
 
     #button
     html.Div(dcc.Input(id='inputX', type='text')),
-    html.Button('Submit', id='submitX', n_clicks=0),
+    #html.Button('Submit', id='submitX', n_clicks=0),
     html.Div(id='containerX', children='Enter a value and press submit'),
 
     html.Div(dcc.Input(id='inputY', type='text')),
-    html.Button('Submit', id='submitY', n_clicks=0),
-    html.Div(id='containerY', children='Enter a value and press submit')
 
+    html.Div(id='containerY', children='Enter a value and press submit'),
+
+    html.Button('Submit', id='submit', n_clicks=0),
 
 ]
 )
+
+
+
+
+
 @app.callback(
     dash.dependencies.Output('containerY', 'children'),
-    dash.dependencies.Input('submitY', 'n_clicks'),
-    dash.dependencies.State('inputY', 'value'),
-
+    dash.dependencies.Input('submit', 'n_clicks'),
+    [dash.dependencies.State('inputX', 'value'),
+    dash.dependencies.State('inputY', 'value')],
 )
-def update_output(n_clicks, value):
+def update_output(n_clicks, value1, value2, ):
     # так можно доставать вытащить значения для callback элемента.
     # X=value
     # print(X)
-    return 'The input value was "{}"  '.format(
-        value
+    return 'The input value was {}_____{}  '.format(
+         value1, value2,n_clicks
 
     )
-@app.callback(
-    dash.dependencies.Output('containerX', 'children'),
-    dash.dependencies.Input('submitX', 'n_clicks'),
-    dash.dependencies.State('inputX', 'value'),
 
-)
-def update_output(n_clicks, value):
-    # так можно доставать вытащить значения для callback элемента.
-    # X=value
-    # print(X)
-    return 'The input value was "{}"  '.format(
-        value
-
-    )
 
 # slider callback for t .
 @app.callback(
@@ -114,9 +107,6 @@ def update_output(value):
     #printedvalue=value
     #print(printedvalue)
     return 'You have selected t="{}"'.format(value)
-
-
-
 
 
 if __name__ == '__main__':
