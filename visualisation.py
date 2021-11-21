@@ -37,7 +37,7 @@ def calculate(X,Y,Z,t):
 # ---------- Generate graphs ----------
 layout = {'title': {'text': '3D'}}
 
-fig = go.Figure(data=[go.Surface(x=X, y=Y, z=Z)], layout=layout)
+fig = go.Figure(data=[go.Mesh3d(x=X, y=Y, z=Z)], layout=layout)
 
 # ---------- Display ----------
 
@@ -111,7 +111,6 @@ app.layout = html.Div([
      dash.dependencies.State('inputT_change', 'value'),
      dash.dependencies.State('inputT_end', 'value'),
      ],
-
 )
 
 
@@ -174,7 +173,6 @@ def update_slider(nClicks, sliderMin, sliderMax, sliderValue, sliderStep, slider
 @app.callback(
     dash.dependencies.Output('slider-output-container', 'children'),
     dash.dependencies.Input('my-slider', 'value')
-
 )
 def update_output(value):
     # printedvalue=value
@@ -193,14 +191,19 @@ def update_graph(value):
     X = X_input
     Y = Y_input
     Z = Z_input
-
+    #check if mesh is correct
+    pts = np.loadtxt(np.DataSource().open('https://raw.githubusercontent.com/plotly/datasets/master/mesh_dataset.txt'))
+    x, y, z = pts.T
+    x= x*value*value
+    y=y*value
+    z=z*value
     calculate(X, Y, Z, tvalue)
     # X=  X_input
     # Y = Y_input
     # Z = Z_input
 
-
-    return go.Figure(data=[go.Surface(x=X, y=Y, z=Z)], layout=layout)
+    fig = go.Figure(data=[go.Mesh3d(x=x, y=y, z=z)], layout=layout)
+    return fig
 
 
 
