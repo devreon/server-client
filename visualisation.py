@@ -65,6 +65,7 @@ app.layout = html.Div([
     ),
     # slider
 
+
     dcc.Slider(
         id='my-slider',
         min=0,
@@ -100,6 +101,7 @@ app.layout = html.Div([
     html.Button('Submit', id='submit', n_clicks=0),
 
 ]
+
 )
 
 
@@ -240,14 +242,22 @@ def update_graph(value):
         scene=dict(
             xaxis=dict(nticks=4, range=[X[0], X[-1]], ),
             yaxis=dict(nticks=4, range=[Y[0], Y[-1]], ),
-            zaxis=dict(nticks=4, range=([Z_transpose[0], Z_transpose[-1]]), ), ),
+            zaxis=dict(nticks=4, range=([Z_transpose[0], Z_transpose[-1]]), ),
+            #aspectmode='manual',  #try to find good aspectmode to fix xyz size
+            aspectratio=dict(x=10, y=5, z=10),
+        ),
         width=700,
-        )
-
-    fig.update_xaxes(automargin=True, autorange=True)
 
 
+     )
+    name = 'default'
+    camera = dict(
+        up=dict(x=0, y=0, z=1),
+        center=dict(x=0, y=0, z=0),
+        eye=dict(x=10, y=5, z=10)
+    )
 
+    fig.update_layout(scene_camera= camera, title=name)
     return fig
 
 
