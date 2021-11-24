@@ -18,10 +18,16 @@ Y_input = []
 T_input = []
 Z_input = []
 
+x_min=0
+x_max=0
+y_max=0
+y_min=0
+z_min=0
+z_max=0
 
 # ---------- Initialize X, Y, Z ----------
 def f(x, y, t):
-    return (1 / 2 * (math.pow(x + y, 4) + math.pow(x - y, 4)))*t  # math.sin(x*x+y*y)/((x*x+y*y))
+    return (math.sin(x*x+y*y)/((x*x+y*y)))+t
 
 
 
@@ -32,12 +38,10 @@ def calculate(X,Y,Z,t):
 
 
 
-
-
 # ---------- Generate graphs ----------
 layout = {'title': {'text': '3D'}}
 
-fig = go.Figure(data=[go.Mesh3d(x=X, y=Y, z=Z)], layout=layout)
+fig = go.Figure(data=[go.Surface()], layout=layout)
 
 # ---------- Display ----------
 
@@ -98,6 +102,7 @@ app.layout = html.Div([
 ]
 )
 
+
 @app.callback(
     dash.dependencies.Output('container', 'children'),
     dash.dependencies.Input('submit', 'n_clicks'),
@@ -124,19 +129,30 @@ def update_output(n_clicks, x_start, x_change, x_end, y_start, y_change, y_end, 
     print(x_start)
     print(x_change)
     print(x_end)
-    for i in np.arange(x_start, x_end, x_change):
-        X_input.append(i)
-    for i in np.arange(y_start, y_end, y_change):
-        Y_input.append(i)
-    for i in np.arange(t_start, t_end, t_change):
-        T_input.append(i)
+    X_input.clear()
+    Y_input.clear()
+    T_input.clear()
+    for i in np.arange(x_start, x_end+x_change, x_change):
+        X_input.append(round(i,5))
+    for i in np.arange(y_start, y_end+y_change, y_change):
+        Y_input.append(round(i,5))
+    for i in np.arange(t_start, t_end+t_change, t_change):
+        T_input.append(round(i,5))
 
 
+    x_max = x_start
+    x_min = x_end
+    y_max = y_start
+    y_min = y_end
 
+
+    #fig.update_xaxes(range=[x_start, x_end])
+    #fig.update_yaxes(range=[y_start, y_end])
 
 
     return 'The input value was {}_____{}_____{}_____{}_____{}_____{}_____{}_____{}_____{}_____  '.format(
-         x_start, x_change, x_end,y_start, y_change, y_end, t_start, t_change, t_end, n_clicks
+         round(x_start,5), round(x_change,5), round(x_end,5),round(y_start,5), round(y_change,5), round(y_end,5), round(t_start,5), round(t_change,5), round(t_end, 5), n_clicks
+
 
     )
 
@@ -184,36 +200,55 @@ def update_output(value):
               [dash.dependencies.Input('my-slider', 'value')]
               )
 def update_graph(value):
+
     tvalue = value
 
-    Z_input = np.zeros((len(X_input), len(X_input)))
+    Z_input = np.zeros((len(X_input), len(Y_input)))
 
     X = X_input
     Y = Y_input
+
     Z = Z_input
-    #check if mesh is correct
-    pts = np.loadtxt(np.DataSource().open('https://raw.githubusercontent.com/plotly/datasets/master/mesh_dataset.txt'))
-    x, y, z = pts.T
-    x= x*value*value
-    y=y*value
-    z=z*value
+
     calculate(X, Y, Z, tvalue)
-    # X=  X_input
-    # Y = Y_input
-    # Z = Z_input
+    # print('X=', X)
+    # print('Y=', Y)
+    # print('Z=', Z)
+    print('X size =', len(X))
+    print('Y size=', len(Y))
+    print('Z size=', len(Z))
+    Z_transpose =Z.transpose()
+    # z_min = Z_transpose[0]
+    # z_max = Z_transpose[-1]
+    # fig = go.Figure(data=[go.Surface(x=X, y=Y, z=Z)], go.Layout(
+    #
+    #
+    # ))
+    fig = go.Figure(data=[go.Surface(x=X, y=Y, z= Z_transpose)], layout=layout)
 
-    fig = go.Figure(data=[go.Mesh3d(x=x, y=y, z=z)], layout=layout)
+    # fig.update_layout(go.Layout(
+    #     autosize=False,
+    #
+    #     xaxis=dict(range=[-10, 10],autorange=False),
+    #     yaxis=dict(range=[-4, 4],autorange=False),
+    #
+    #     title="Start Title"
+    # ))
+
+    fig.update_layout(
+
+        scene=dict(
+            xaxis=dict(nticks=4, range=[X[0], X[-1]], ),
+            yaxis=dict(nticks=4, range=[Y[0], Y[-1]], ),
+            zaxis=dict(nticks=4, range=([Z_transpose[0], Z_transpose[-1]]), ), ),
+        width=700,
+        )
+
+    fig.update_xaxes(automargin=True, autorange=True)
+
+
+
     return fig
-
-
-
-
-
-
-
-
-
-
 
 
 if __name__ == '__main__':
