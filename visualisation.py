@@ -236,28 +236,32 @@ def update_graph(value):
     #
     #     title="Start Title"
     # ))
-
-    fig.update_layout(
-
+    if (len(X) != 0 and len(Y) != 0 and len(Z) != 0):
+        asp_x = X[-1]
+        asp_y = Y[-1]
+        asp_z = abs(max(max(x) for x in Z_transpose))
+        #print('Z_transpose',Z_transpose[-1])
+    if (len(X) != 0 and len(Y) != 0 and len(Z) != 0):
+        fig.update_layout(
         scene=dict(
             xaxis=dict(nticks=4, range=[X[0], X[-1]], ),
             yaxis=dict(nticks=4, range=[Y[0], Y[-1]], ),
             zaxis=dict(nticks=4, range=([Z_transpose[0], Z_transpose[-1]]), ),
             #aspectmode='manual',  #try to find good aspectmode to fix xyz size
-            aspectratio=dict(x=10, y=5, z=10),
+
+
+            aspectratio=dict(x=asp_x, y=asp_y, z=asp_x),
         ),
         width=700,
 
 
-     )
-    name = 'default'
-    camera = dict(
-        up=dict(x=0, y=0, z=1),
-        center=dict(x=0, y=0, z=0),
-        eye=dict(x=10, y=5, z=10)
-    )
+        )
+        name = 'default'
+        camera = dict(
+         eye=dict(x=asp_x, y=asp_y, z=asp_x)
+        )
 
-    fig.update_layout(scene_camera= camera, title=name)
+        fig.update_layout(scene_camera= camera, title=name)
     return fig
 
 
