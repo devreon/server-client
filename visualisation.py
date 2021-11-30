@@ -27,7 +27,7 @@ z_max=0
 
 # ---------- Initialize X, Y, Z ----------
 def f(x, y, t):
-    return (math.sin(x*x+y*y)/((x*x+y*y)))+t
+    return (math.sin(x * x + y * y) /(x * x+0.1 + y * y+0.1))+ t
 
 
 
@@ -211,21 +211,24 @@ def update_graph(value):
     Y = Y_input
 
     Z = Z_input
-
+    print('Z_input=', Z_input)
     calculate(X, Y, Z, tvalue)
-    # print('X=', X)
-    # print('Y=', Y)
-    # print('Z=', Z)
-    print('X size =', len(X))
-    print('Y size=', len(Y))
-    print('Z size=', len(Z))
+    print('X=', X)
+    print('Y=', Y)
+    print('Z=', Z)
+    # print('X size =', len(X))
+    # print('Y size=', len(Y))
+    # print('Z size=', len(Z))
     Z_transpose =Z.transpose()
+
     # z_min = Z_transpose[0]
     # z_max = Z_transpose[-1]
     # fig = go.Figure(data=[go.Surface(x=X, y=Y, z=Z)], go.Layout(
     #
     #
     # ))
+
+
     fig = go.Figure(data=[go.Surface(x=X, y=Y, z= Z_transpose)], layout=layout)
 
     # fig.update_layout(go.Layout(
