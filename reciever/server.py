@@ -9,6 +9,10 @@ import gspread
 import json
 from gspread_dataframe import set_with_dataframe
 
+from gspread_dataframe import get_as_dataframe, set_with_dataframe
+
+
+
 # device's IP address
 SERVER_HOST = socket.gethostbyname(socket.gethostname())
 SERVER_PORT = 5001
@@ -141,12 +145,17 @@ def main():
 
         datasetz = pd.DataFrame(Z)
 
-
         wks = sh.worksheet("listz")
-        set_with_dataframe(wks, datasetz)
 
+        set_with_dataframe(wks, datasetz, include_column_header=False)
 
+        set_with_dataframe(wks, datasetz,14,1 , include_column_header=False)
 
+        df = get_as_dataframe(wks, parse_dates=True, usecols=np.r_[0:21], nrows=9, header=None)
+        print(df)
+
+        df = get_as_dataframe(wks, parse_dates=True, usecols=np.r_[0:21], nrows=9,skiprows=np.r_[0:13], header=None)
+        print(df)
 
 main()
 

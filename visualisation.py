@@ -7,6 +7,9 @@ from dash import html
 import dash_bootstrap_components as dbc
 import numpy as np
 import math
+import gspread
+
+
 
 X = []
 Y = []
