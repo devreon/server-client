@@ -136,17 +136,23 @@ def main():
         datasett = pd.DataFrame()
         datasett['t'] = T_input
         # print(datasety)
+
         wks = sh.worksheet("listx")
+        wks.clear()
         set_with_dataframe(wks, dataset)
+
         wks = sh.worksheet("listy")
+        wks.clear()
         set_with_dataframe(wks, datasety)
+
         wks = sh.worksheet("listt")
+        wks.clear()
         set_with_dataframe(wks, datasett)
 
         datasetz = pd.DataFrame(Z)
 
         wks = sh.worksheet("listz")
-
+        wks.clear()
         set_with_dataframe(wks, datasetz, include_column_header=False)
 
         set_with_dataframe(wks, datasetz,14,1 , include_column_header=False)
